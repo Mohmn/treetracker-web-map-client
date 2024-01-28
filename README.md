@@ -1,4 +1,4 @@
-**Table of Contents**
+**Table of Contents.**
 
 - [Treetracker Web Map Beta](#treetracker-web-map-beta)
   - [Project Description](#project-description)
