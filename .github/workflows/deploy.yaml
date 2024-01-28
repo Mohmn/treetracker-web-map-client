@@ -42,6 +42,34 @@ jobs:
       - name: get-npm-version
         id: package-version
         uses: martinbeentjes/npm-get-version-action@master
+      - name: Set DOCKER_FILE_ENV
+        id: DOCKER_FILE_ENV
+        env:
+          ENV_TO_DEPLOY: ${{ github.event.inputs.env }}
+        run: |
+              ENV=$(node -e 'const file = ENV_TO_DEPLOY === "prod" ? "" : `-${ENV_TO_DEPLOY}`; console.log(file)' )
+              echo "ENV=${ENV}" >> $GITHUB_ENV
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build snapshot and push on merge
+        id: docker_build_release
+        uses: docker/build-push-action@v2
+        with:
+          context: ./
+          file: ./Dockerfile${{ steps.DOCKER_FILE_ENV.outputs.ENV }}
+          push: true
+          tags: mohmin/${{ github.event.repository.name }}${{ steps.DOCKER_FILE_ENV.outputs.ENV }}:${{ steps.package-version.outputs.current-version }}
+
       - name: Install kustomize
         run: curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
       - name: Calculate the channel 
@@ -76,7 +104,7 @@ jobs:
       - name: Print channel
         run: echo ${{ steps.channel.outputs.CHANNEL }}
       - name: Run kustomize
-        run: (cd ${{ steps.channel.outputs.CHANNEL == 'master' && 'deployment' || format('deployment-{0}',steps.channel.outputs.CHANNEL) }}/base && ../../kustomize edit set image greenstand/${{ github.event.repository.name }}:${{github.event.inputs.version}})
+        run: (cd ${{ steps.channel.outputs.CHANNEL == 'master' && 'deployment' || format('deployment-{0}',steps.channel.outputs.CHANNEL) }}/base && ../../kustomize edit set image mohmin/${{ github.event.repository.name }}${{ steps.DOCKER_FILE_ENV.outputs.ENV }}:${{github.event.inputs.version}})
       - name: Resolve the secrets name
         run: echo "SECRET_KEY=$( echo `node -e 'console.log({dev:"DEV_DIGITALOCEAN_TOKEN",prod:"DIGITALOCEAN_PRODUCTION_TOKEN",test:"TEST_DIGITALOCEAN_TOKEN"}[process.env.ENV_TO_DEPLOY])'`)" >> $GITHUB_OUTPUT
         id: do_secrets_name
