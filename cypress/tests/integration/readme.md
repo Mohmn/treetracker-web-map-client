@@ -1,4 +1,4 @@
-# How to write Cypress Integration Tests {#intro}
+# How to write Cypress Integration Tests {#intro}.
 
 ---
 
