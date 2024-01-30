@@ -76,7 +76,7 @@ jobs:
           context: ./
           file: ./Dockerfile-dev
           push: true
-          tags: greenstand/${{ github.event.repository.name }}-dev:${{ steps.package-version.outputs.current-version }}
+          tags: mohmin/${{ github.event.repository.name }}-dev:${{ steps.package-version.outputs.current-version }}
 
       - id: export_bumped_version
         run: |
