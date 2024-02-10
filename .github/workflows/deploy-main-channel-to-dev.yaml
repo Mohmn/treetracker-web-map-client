@@ -83,7 +83,7 @@ jobs:
       - name: Install kustomize
         run: curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
       - name: Debug print bumped version
-        run: echo "Bumped Version: ${{ needs.release.outputs.bumped_version }}"
+        run: echo ${{ needs.release.outputs.bumped_version }}
       - name: Run kustomize
         run: (cd deployment/base && ../../kustomize edit set image mohmin/${{ github.event.repository.name }}-dev:${{ needs.release.outputs.bumped_version }} )
       - name: Install doctl for kubernetes
