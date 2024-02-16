@@ -1,11 +1,13 @@
 name: Build the project and tag,version it and release to dev env test yo
 
 on:
-  workflow_dispatch:
-    inputs:
-      git-tag:
-        description: 'Branch/hash/tag'
-        required: true
+  release:
+    types: [created]
+    workflow_dispatch:
+      inputs:
+        git-tag:
+          description: 'Branch/hash/tag'
+          required: true
 
 env:
   project-directory: ./
