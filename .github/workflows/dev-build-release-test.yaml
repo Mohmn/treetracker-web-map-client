@@ -1,4 +1,4 @@
-name: Build the project and tag,version it and release to dev env
+name: Build the project and tag,version it and release to dev env test yo
 
 on:
   workflow_dispatch:
