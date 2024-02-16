@@ -140,4 +140,4 @@ _Footnote(s)_
 [^2]: [Cypress Best Practices](https://docs.cypress.io/guides/references/best-practices)
 [^3]: Fixtures are files with a fixed set of data that we want to use.
 [^4]: This patten is within most integration tests in this codebase. If lost, read the other integration tests.
-[^5]: Most paths are located in `nockRoutes.js` file, however, if a path is not in the folder and you are lost please ask anyone in the team's slack channel.
+[^5]: Most paths are located in `nockRoutes.js` file, however, if a path is not in the folder and you are lost please ask anyone in the team's slack channel
